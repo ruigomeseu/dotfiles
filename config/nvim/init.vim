@@ -36,6 +36,6 @@ call plug#end()
 syntax enable
 colorscheme OceanicNext
 
-silent! nmap <C-p> :FZF<CR>
+nnoremap <expr> <C-p> (len(system('git rev-parse')) ? ':Files' : ':GFiles --exclude-standard --others --cached')."\<cr>"
 silent! map <F2> :NERDTreeToggle<CR>
 silent! map <F3> :NERDTreeFind<CR>
