@@ -1,2 +1,2 @@
-sudo pacman -Syu yay rofi ttf-fira-code neovim
-yay -S rofi-calc rofi-emoji st-luke-git
+sudo pacman -Syu yay rofi ttf-fira-code neovim alacritty
+yay -S rofi-calc rofi-emoji
