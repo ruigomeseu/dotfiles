@@ -1,0 +1,132 @@
+[colors]
+background = #BF222222
+background-alt = #444
+foreground = #dfdfdf
+foreground-alt = #555
+primary = #f16821
+secondary = #e60053
+alert = #bd2c40
+
+[bar/bar1]
+width=100%
+height = 28
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f00
+
+;border-size = 4
+;border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = "Fira Code Medium:size=12;2"
+font-1 = "siji;1"
+
+modules-left = i3
+modules-right = backlight temperature wlan battery-combined-tlp date
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+label-mode-padding = 1
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = ${colors.background-alt}
+label-focused-underline = ${colors.primary}
+label-focused-padding = 1
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = 1
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+[module/backlight]
+type = internal/backlight
+card = intel_backlight
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #636e80
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 60
+
+format = <ramp> <label>
+format-underline = #636e80
+format-warn = <ramp> <label-warn>
+format-warn-underline = ${self.format-underline}
+
+label = %temperature-c%
+label-warn = %temperature-c%
+label-warn-foreground = ${colors.secondary}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 5
+
+date =
+date-alt = " %a, %d %b -"
+
+time = %H:%M
+time-alt = %H:%M
+
+format-prefix = ""
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #636e80
+
+label = %date% %time%
+
+[module/battery-combined-tlp]
+type = custom/script
+exec = ~/.config/polybar/battery-combined-tlp.sh
+interval = 10
+
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #636e80
+
+[module/wlan]
+type = internal/network
+interface = wlp3s0
+interval = 5.0
+
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.foreground-alt}
+
+format-connected = <label-connected>
+format-connected-underline = #636e80
+format-disconnected-underline = #636e80
+
+label-connected = %{A:kitty -e nmtui &:}%essid%%{A}
+label-disconnected = %{A:kitty -e nmtui &:}N/A%{A}
+label-disconnected-foreground = #636e80

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ "$1" = "java" ]; then
+  echo "Setting up JAVACowork profile"
+  xrandr --output DP1 --auto --above eDP1
+else
+  echo "Unknown display setup, running xrandr --auto"
+  xrandr --auto
+fi
+
+i3-msg restart
