@@ -5,6 +5,7 @@ export LC_CTYPE=pt_PT.UTF-8
 
 alias vim='nvim'
 alias code='cd ~/code'
+alias ssh='TERM=xterm-256color \ssh'
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/rui/.oh-my-zsh"
