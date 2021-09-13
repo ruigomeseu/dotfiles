@@ -5,6 +5,7 @@ export LC_CTYPE=pt_PT.UTF-8
 
 alias vim='nvim'
 alias code='cd ~/code'
+alias ssh='TERM=xterm-256color \ssh'
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/rui/.oh-my-zsh"
@@ -103,3 +104,13 @@ source $ZSH/oh-my-zsh.sh
 
 export PATH="$PATH:`yarn global bin`"
 export PATH="$PATH:$HOME/.scripts"
+source /usr/share/nvm/init-nvm.sh
+export GOPATH=~/code/go
+export PATH=$PATH:$GOPATH/bin
+
+export EDITOR=/usr/bin/vim
+export KEYID=0xDD1D850F8B7D97EE
+export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
+

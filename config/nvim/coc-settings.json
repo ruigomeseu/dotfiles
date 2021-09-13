@@ -1,0 +1,12 @@
+{
+  "tsserver.npm": "/usr/bin/npm",
+  "tsserver.log": "verbose",
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "tsserver.formatOnType": true,
+  "coc.preferences.formatOnType": true
+}

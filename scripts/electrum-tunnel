@@ -3,5 +3,6 @@
 #ssh -t cubi '~/electrum.sh'
 ssh -N -L 50002:localhost:50002 cubi &
 PID=$!
+sleep 1
 electrum --oneserver --server localhost:50002:s
 kill $PID
