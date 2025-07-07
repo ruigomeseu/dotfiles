@@ -1,4 +1,0 @@
-#!/bin/sh
-
-curl --progress-bar --upload-file $1 https://transfer.sh
-echo ""
