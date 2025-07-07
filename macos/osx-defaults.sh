@@ -43,11 +43,14 @@ setup_osx() {
   # Set weekly software update checks
   defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 7
 
+  # Hide menu bar
+  defaults write NSGlobalDomain _HIHideMenuBar -bool true
+
   # Set Dock autohide
   defaults write com.apple.dock autohide -bool true
-  defaults write com.apple.dock largesize -float 128
+  defaults write com.apple.dock largesize -float 256
   defaults write com.apple.dock "minimize-to-application" -bool true
-  defaults write com.apple.dock tilesize -float 32
+  defaults write com.apple.dock tilesize -float 64
 
   # Disable startup sound
   sudo nvram SystemAudioVolume=%01

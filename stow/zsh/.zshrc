@@ -12,7 +12,6 @@ setopt autocd
 # Initialize completion
 autoload -U compinit; compinit
 
-# The most important aliases ever (the only thing I borrowed from OMZ)
 alias l='ls -lah'
 alias la='ls -lAh'
 alias ll='ls -lh'
@@ -40,3 +39,9 @@ alias cat="bat --paging=never"
 alias ls="eza"
 alias cd="z"
 alias vim="nvim"
+
+# Set up zsh-autosuggestions
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Set up zsh-syntax-highlighting
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

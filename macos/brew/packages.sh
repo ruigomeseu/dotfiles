@@ -1,6 +1,4 @@
 taps=(
-  homebrew/cask
-  homebrew/cask-fonts
   stripe/stripe-cli
   withgraphite/tap
   felixkratz/formulae
@@ -23,17 +21,19 @@ packages=(
   just
   libpq
   neovim
-  nvm
   p7zip
   pulumi/tap/pulumi
   rclone
   redis
   ripgrep
   stripe/stripe-cli/stripe
+  stow
   telnet
+  tmux
   wget
   withgraphite/tap/graphite
   yt-dlp
+  starship
   zoxide
   zsh
   zsh-autosuggestions
@@ -49,4 +49,17 @@ install_packages() {
 
   info "Cleaning up brew packages..."
   brew cleanup
+}
+
+start_brew_services() {
+  local services=(
+    atuin
+    felixkratz/formulae/sketchybar
+  )
+
+  info "Starting brew services..."
+  for service in "${services[@]}"; do
+    info "Starting service < $service >"
+    brew services start "$service"
+  done
 }

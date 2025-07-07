@@ -4,6 +4,7 @@ stow_dotfiles() {
     "ghostty"
     "sketchybar"
     "tmux"
+    "zsh"
   )
 
   for file in "${files[@]}"; do

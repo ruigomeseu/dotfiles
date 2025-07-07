@@ -31,12 +31,19 @@ main() {
   success "Finished installing Homebrew packages"
 
   info "################################################################################"
+  info "Starting Services"
+  info "################################################################################"
+  start_brew_services
+
+  success "Finished starting brew services"
+
+  info "################################################################################"
   info "MacOS Apps"
   info "################################################################################"
   wait_input
-  # install_macos_apps
+  install_macos_apps
 
-  # install_masApps
+  install_masApps
   success "Finished installing macOS apps"
 
   info "################################################################################"

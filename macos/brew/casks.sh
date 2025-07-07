@@ -1,16 +1,18 @@
 install_macos_apps() {
   local apps=(
-    aerospace
+    nikitabobko/tap/aerospace
     aws-vault
+    bartender
     brave-browser
     cursor
     datagrip
     fantastical
     font-hack-nerd-font
+    font-maple-mono
     ghostty
     insomnia
-    insomnia
     lunar
+    nextcloud
     ngrok
     orbstack
     raycast
@@ -33,7 +35,11 @@ install_masApps() {
   )
 
   info "Installing App Store apps..."
-  for app in "${apps[@]}"; do
-    mas install "$app"
-  done
+  if [[ ${#apps[@]} -gt 0 ]]; then
+    for app in "${apps[@]}"; do
+      mas install "$app"
+    done
+  else
+    info "No App Store apps to install"
+  fi
 }
