@@ -14,7 +14,17 @@ sudo xcodebuild -license accept
 
 # Install git
 brew install git
+
+# Run script
+cd macos
+./install.sh
 ```
+
+### Not automated
+
+- Hide menu bar
+- Tmux Plugin Manager
+  - https://github.com/tmux-plugins/tpm
 
 ## Resources
 

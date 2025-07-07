@@ -33,6 +33,7 @@ packages=(
   wget
   withgraphite/tap/graphite
   yt-dlp
+  sesh
   starship
   zoxide
   zsh
