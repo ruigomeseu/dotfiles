@@ -22,6 +22,7 @@ install_macos_apps() {
     slack
     spotify
     telegram
+    todoist-app
     zoom
   )
 
