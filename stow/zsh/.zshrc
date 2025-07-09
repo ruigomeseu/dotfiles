@@ -1,3 +1,6 @@
+# Emacs bindings
+bindkey -e
+
 # Enable persistent history
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
@@ -34,6 +37,9 @@ eval "$(atuin init zsh)"
 export EDITOR="nvim"
 export VISUAL="nvim" 
 
+# Set up the terminal
+export TERM=xterm-256color
+
 # Set up aliases
 alias cat="bat --paging=never"
 alias ls="eza"
@@ -45,3 +51,9 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Set up zsh-syntax-highlighting
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+# Load nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
