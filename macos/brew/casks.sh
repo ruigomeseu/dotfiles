@@ -6,6 +6,7 @@ install_macos_apps() {
     brave-browser
     cursor
     datagrip
+    elmedia-player
     fantastical
     font-hack-nerd-font
     font-maple-mono

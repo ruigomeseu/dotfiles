@@ -22,6 +22,7 @@ packages=(
   libpq
   neovim
   p7zip
+  postgresql
   pulumi/tap/pulumi
   rclone
   redis
