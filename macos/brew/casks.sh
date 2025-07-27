@@ -15,6 +15,7 @@ install_macos_apps() {
     lunar
     nextcloud
     ngrok
+    obsidian
     orbstack
     raycast
     readdle-spark
@@ -32,8 +33,9 @@ install_macos_apps() {
 }
 
 install_masApps() {
+  # Reference: https://medium.com/@protiumx/bash-gnu-stow-take-a-walk-while-your-new-macbook-is-being-set-up-351a6f2f9225
   local apps=(
-    # Apple Store ID: https://medium.com/@protiumx/bash-gnu-stow-take-a-walk-while-your-new-macbook-is-being-set-up-351a6f2f9225
+    1475387142 # Tailscale
   )
 
   info "Installing App Store apps..."

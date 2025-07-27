@@ -19,8 +19,11 @@ packages=(
   sketchybar
   jq
   just
+  lazygit
   libpq
+  mas
   neovim
+  ollama
   p7zip
   postgresql
   pulumi/tap/pulumi

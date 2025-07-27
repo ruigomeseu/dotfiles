@@ -2,6 +2,7 @@ stow_dotfiles() {
   local files=(
     "aerospace"
     "ghostty"
+    "nvim"
     "sketchybar"
     "tmux"
     "zsh"
