@@ -53,8 +53,11 @@ setup_osx() {
   defaults write com.apple.dock tilesize -float 64
 
   # Increases key repeat rate
-  defaults write -g InitialKeyRepeat -float 10.0 # normal minimum is 15 (225 ms)
-  defaults write -g KeyRepeat -float 1.0 # normal minimum is 2 (30 ms)
+  defaults write -g InitialKeyRepeat -float 15 # normal minimum is 15 (225 ms)
+  defaults write -g KeyRepeat -float 1.0       # normal minimum is 2 (30 ms)
+
+  # Disable window animations
+  defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
 
   # Disable startup sound
   sudo nvram SystemAudioVolume=%01

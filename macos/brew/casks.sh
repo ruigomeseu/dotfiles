@@ -1,9 +1,12 @@
 install_macos_apps() {
   local apps=(
     nikitabobko/tap/aerospace
+    arq
     aws-vault
     bartender
+    bambu-studio
     brave-browser
+    caffeine
     cursor
     datagrip
     elmedia-player

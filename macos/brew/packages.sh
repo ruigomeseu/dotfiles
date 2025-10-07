@@ -7,9 +7,9 @@ taps=(
 
 packages=(
   atuin
-  awscli
   bat
   btop
+  carapace
   cmake
   diff-so-fancy
   eza
@@ -17,6 +17,7 @@ packages=(
   fd
   fzf
   sketchybar
+  jesseduffield/lazydocker/lazydocker
   jq
   just
   lazygit
@@ -37,7 +38,6 @@ packages=(
   wget
   withgraphite/tap/graphite
   yt-dlp
-  sesh
   starship
   zoxide
   zsh
