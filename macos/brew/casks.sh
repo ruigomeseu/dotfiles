@@ -7,7 +7,9 @@ install_macos_apps() {
     bambu-studio
     brave-browser
     caffeine
+    cap
     cursor
+    cyberduck
     datagrip
     elmedia-player
     fantastical
@@ -27,6 +29,7 @@ install_macos_apps() {
     slack
     spotify
     telegram
+    the-unarchiver
     todoist-app
     zoom
   )

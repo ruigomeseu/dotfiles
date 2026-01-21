@@ -60,10 +60,6 @@ if.app-id = 'com.brave.Browser'
 run = ['move-node-to-workspace 3']
 
 [[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
-run = ['move-node-to-workspace 5']
-
-[[on-window-detected]]
 if.app-id = 'md.obsidian'
 run = ['move-node-to-workspace N']
 
@@ -94,6 +90,14 @@ run = ['move-node-to-workspace M']
 [[on-window-detected]]
 if.app-id = 'com.granola.app'
 run = ['move-node-to-workspace G']
+
+[[on-window-detected]]
+if.app-id = 'com.todoist.mac.Todoist'
+run = ['move-node-to-workspace T']
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = ['move-node-to-workspace S']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
@@ -185,6 +189,8 @@ alt-m = 'workspace M' # for Music
 alt-n = 'workspace N' # for Notes
 alt-f = 'workspace F' # for Finder (File Explorer)
 alt-g = 'workspace G' # for Granola (record meetings)
+alt-t = 'workspace T' # for Todoist
+alt-s = 'workspace S' # for Slack
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = 'move-node-to-workspace 1'
@@ -203,6 +209,8 @@ alt-shift-m = 'move-node-to-workspace M' # for Music
 alt-shift-n = 'move-node-to-workspace N' # for Notes
 alt-shift-f = 'move-node-to-workspace F' # for Finder (File Explorer)
 alt-shift-g = 'move-node-to-workspace G' # for Granola
+alt-shift-t = 'move-node-to-workspace T' # for Todoist
+alt-shift-s = 'move-node-to-workspace S' # for Slack
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'

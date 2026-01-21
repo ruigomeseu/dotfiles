@@ -1,0 +1,7 @@
+[user]
+	name = Rui Gomes
+	email = hello@ruigomes.me
+
+[rerere]
+  enabled=true
+  autoupdate = true

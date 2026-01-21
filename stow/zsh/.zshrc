@@ -29,9 +29,6 @@ alias lg='lazygit'
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
 
-# Set up zoxide to move between folders efficiently
-eval "$(zoxide init zsh)"
-
 # Set up the Starship prompt
 eval "$(starship init zsh)"
 
@@ -63,6 +60,7 @@ alias ls="eza"
 alias cd="z"
 alias vim="nvim"
 alias cpd="copydeep"
+alias dateutc='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 source <(carapace _carapace)
@@ -86,4 +84,17 @@ export NVM_DIR="$HOME/.nvm"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-alias claude="/Users/rgomes/.claude/local/claude"
+# Set up zoxide to move between folders efficiently
+if [[ $- == *i* ]]; then
+  eval "$(zoxide init zsh)"
+fi
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/rgomes/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
