@@ -15,6 +15,7 @@ packages=(
   eza
   fastfetch
   fd
+  ffmpeg
   fzf
   sketchybar
   jesseduffield/lazydocker/lazydocker
@@ -23,6 +24,7 @@ packages=(
   lazygit
   libpq
   mas
+  mole
   neovim
   ollama
   p7zip
