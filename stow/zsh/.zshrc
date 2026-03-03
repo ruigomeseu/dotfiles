@@ -12,9 +12,6 @@ alias history='history -50'
 setopt HIST_SAVE_NO_DUPS
 setopt INC_APPEND_HISTORY
 
-# Move to directories without cd
-setopt autocd
-
 # Initialize completion
 autoload -U compinit; compinit
 
@@ -57,7 +54,6 @@ copydeep () {
 # Set up aliases
 alias cat="bat --paging=never"
 alias ls="eza"
-alias cd="z"
 alias vim="nvim"
 alias cpd="copydeep"
 alias dateutc='date -u +"%Y-%m-%dT%H:%M:%SZ"'
@@ -84,10 +80,7 @@ export NVM_DIR="$HOME/.nvm"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# Set up zoxide to move between folders efficiently
-if [[ $- == *i* ]]; then
-  eval "$(zoxide init zsh)"
-fi
+eval "$(zoxide init zsh)"
 
 export PATH="$HOME/.local/bin:$PATH"
 
