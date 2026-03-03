@@ -1,6 +1,6 @@
 [user]
-	name = Rui Gomes
-	email = hello@ruigomes.me
+  name = Rui Gomes
+  email = hello@ruigomes.me
 
 [rerere]
   enabled=true
