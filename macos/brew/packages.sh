@@ -11,6 +11,7 @@ packages=(
   btop
   carapace
   cmake
+  cosign
   diff-so-fancy
   eza
   fastfetch
@@ -37,6 +38,7 @@ packages=(
   stow
   telnet
   tmux
+  tree
   wget
   withgraphite/tap/graphite
   yt-dlp

@@ -8,6 +8,7 @@ install_macos_apps() {
     brave-browser
     caffeine
     cap
+    steipete/tap/codexbar
     cursor
     cyberduck
     datagrip

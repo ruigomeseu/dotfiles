@@ -1,3 +1,5 @@
+typeset -U path PATH
+
 # Emacs bindings
 bindkey -e
 
@@ -77,8 +79,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 eval "$(zoxide init zsh)"
 
-export PATH="$HOME/.local/bin:$PATH"
-
 # pnpm
 export PNPM_HOME="/Users/rgomes/Library/pnpm"
 case ":$PATH:" in
@@ -88,3 +88,17 @@ esac
 # pnpm end
 
 eval "$(mise activate zsh)"
+
+# opencode
+export PATH=/Users/rgomes/.opencode/bin:$PATH
+
+export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+# dcg: warn if hook was silently removed from Claude Code settings
+if command -v dcg &>/dev/null && command -v jq &>/dev/null; then
+  if [ -f "$HOME/.claude/settings.json" ] &&      ! jq -e '.hooks.PreToolUse[]? | select(.hooks[]?.command | test("dcg$"))'        "$HOME/.claude/settings.json" &>/dev/null; then
+    printf '\033[1;33m[dcg] Hook missing from ~/.claude/settings.json — run: dcg install\033[0m\n'
+  fi
+fi
