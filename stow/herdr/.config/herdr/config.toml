@@ -1,0 +1,6 @@
+[keys]
+prefix = "ctrl+s"
+switch_workspace = "cmd+1..9"
+
+[ui]
+agent_panel_sort = "spaces"

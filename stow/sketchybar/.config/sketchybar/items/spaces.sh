@@ -7,9 +7,8 @@ for m in $(aerospace list-monitors | awk '{print $1}'); do
     sid=$i
 
     space=(
-      space="$sid"
-
       display="$m"
+      updates=on
 
       label="$sid"
       label.color="$FLAMINGO"
@@ -22,7 +21,7 @@ for m in $(aerospace list-monitors | awk '{print $1}'); do
       click_script="aerospace workspace $sid"
     )
 
-    sketchybar --add space "space.$sid" left \
+    sketchybar --add item "space.$sid" left \
       --set "space.$sid" "${space[@]}" \
       --subscribe "space.$sid" aerospace_workspace_change
   done
