@@ -70,6 +70,16 @@ copydeep() {
 }
 alias cpd='copydeep'
 
+ssh() {
+  command ssh "$@"
+  local status=$?
+
+  stty sane < /dev/tty
+  printf '\033[<u\033[?1049l\033[<u\033[?1l\033[?1000l\033[?1002l\033[?1003l\033[?1004l\033[?1006l\033[?1015l\033[?2004l' > /dev/tty
+
+  return $status
+}
+
 # Optional interactive tools
 if command -v fzf >/dev/null 2>&1; then
   source <(fzf --zsh)
@@ -131,7 +141,82 @@ if command -v dcg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
   fi
 fi
 
-# Mirror npx-managed skills and Claude Code skill links to k12.
+# Mirror manually installed Claude Code plugins to k12. Replays marketplace
+# adds/removes, plugin installs/uninstalls, enabled flags, and updates through
+# the claude CLI on k12 rather than copying ~/.claude/plugins, whose registries
+# hold absolute macOS paths. Safe to rerun. Pass --dry-run to print the remote
+# script instead of running it.
+sync-plugins-k12() {
+  local plugins_dir="$HOME/.claude/plugins"
+  local settings="$HOME/.claude/settings.json"
+  local script='export PATH="$HOME/.local/bin:$PATH"
+set -u
+fail=0
+reg=~/.claude/plugins/installed_plugins.json
+mk=~/.claude/plugins/known_marketplaces.json
+cfg=~/.claude/settings.json
+'
+
+  # Local state, passed to k12 as zsh arrays.
+  local -a markets plugins enabled
+  markets=($(jq -r 'keys[]' "$plugins_dir/known_marketplaces.json"))
+  plugins=($(jq -r '.plugins | keys[]' "$plugins_dir/installed_plugins.json"))
+  enabled=($(jq -r '.enabledPlugins // {} | to_entries[] | select(.value) | .key' "$settings"))
+  script+="markets=(${markets[*]})"$'\n'
+  script+="plugins=(${plugins[*]})"$'\n'
+  script+="enabled=(${enabled[*]})"$'\n'
+
+  # Marketplaces: add local ones (no-op if present).
+  local repo
+  for repo in $(jq -r '.[].source.repo // empty' "$plugins_dir/known_marketplaces.json"); do
+    script+="claude plugin marketplace add '$repo' || fail=1"$'\n'
+  done
+
+  script+='
+# Uninstall plugins not installed locally.
+for id in $(jq -r ".plugins | keys[]" "$reg"); do
+  (( ${plugins[(Ie)$id]} )) || claude plugin uninstall -y "$id" || fail=1
+done
+
+# Remove marketplaces not known locally (after uninstalls, which may depend on them).
+for name in $(jq -r "keys[]" "$mk"); do
+  (( ${markets[(Ie)$name]} )) || claude plugin marketplace remove "$name" || fail=1
+done
+
+# Install missing plugins. Skip present ones: reinstalling a disabled plugin re-enables it.
+for id in $plugins; do
+  jq -e --arg id "$id" ".plugins[\$id]" "$reg" >/dev/null 2>&1 || claude plugin install -y "$id" || fail=1
+done
+
+# Match enabled flags. enable/disable exit non-zero if already in that state.
+for id in $plugins; do
+  cur=$(jq -r --arg id "$id" ".enabledPlugins[\$id] // false" "$cfg")
+  if (( ${enabled[(Ie)$id]} )); then
+    [[ $cur == true ]] || claude plugin enable -s user "$id" || fail=1
+  else
+    [[ $cur == false ]] || claude plugin disable -s user "$id" || fail=1
+  fi
+done
+
+# Update enabled plugins to the latest marketplace version.
+claude plugin marketplace update || fail=1
+for id in $enabled; do
+  claude plugin update -y "$id" || fail=1
+done
+
+exit $fail
+'
+
+  if [[ "${1:-}" == "--dry-run" ]]; then
+    printf '%s' "$script"
+    return 0
+  fi
+
+  printf '%s' "$script" | ssh k12 'zsh -c "$(cat)"'
+}
+
+# Mirror npx-managed skills, Claude Code skill links, and Claude Code plugins
+# to k12.
 sync-skills-k12() {
   local dry_run=()
 
@@ -149,5 +234,13 @@ sync-skills-k12() {
 
   rsync -av "${dry_run[@]}" --delete \
     "$HOME/.claude/skills/" \
-    k12:.claude/skills/
+    k12:.claude/skills/ &&
+
+  sync-plugins-k12 "${1:-}"
 }
+
+# strix
+export PATH=/Users/rgomes/.strix/bin:$PATH
+
+# Added by cua-driver-rs installer — see https://github.com/trycua/cua
+export PATH="/Users/rgomes/.local/bin:$PATH"
