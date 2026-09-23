@@ -4,6 +4,12 @@
 # It's not necessary to copy all keys to your config.
 # If the key is missing in your config, "default-config.toml" will serve as a fallback
 
+config-version = 2
+
+# Keep workspaces available when they have no windows
+persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9',
+  'A', 'B', 'C', 'E', 'F', 'G', 'M', 'N', 'S', 'T']
+
 # You can use it to add commands that run after login to macOS user session.
 # 'start-at-login' needs to be 'true' for 'after-login-command' to work
 # Available commands: https://nikitabobko.github.io/AeroSpace/commands
@@ -50,6 +56,10 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
 run = ['move-node-to-workspace 1']
+
+[[on-window-detected]]
+if.app-id = 'dev.zed.Zed'
+run = ['move-node-to-workspace 2']
 
 [[on-window-detected]]
 if.app-id = 'com.t3tools.t3code'
