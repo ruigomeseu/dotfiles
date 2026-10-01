@@ -72,12 +72,12 @@ alias cpd='copydeep'
 
 ssh() {
   command ssh "$@"
-  local status=$?
+  local ssh_exit_code=$?
 
   stty sane < /dev/tty
   printf '\033[<u\033[?1049l\033[<u\033[?1l\033[?1000l\033[?1002l\033[?1003l\033[?1004l\033[?1006l\033[?1015l\033[?2004l' > /dev/tty
 
-  return $status
+  return $ssh_exit_code
 }
 
 # Optional interactive tools
@@ -232,7 +232,10 @@ sync-skills-k12() {
     "$HOME/.agents/.skill-lock.json" \
     k12:.agents/.skill-lock.json &&
 
+  # synced/ is Claude Code's per-machine download of claude.ai skills and
+  # .trash/ is its recycle bin; neither belongs on another machine.
   rsync -av "${dry_run[@]}" --delete \
+    --exclude synced --exclude .trash \
     "$HOME/.claude/skills/" \
     k12:.claude/skills/ &&
 

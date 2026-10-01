@@ -1,86 +1,77 @@
 #!/bin/bash
+# Adapted from https://github.com/wthrajat/dotfiles-mac/tree/main/sketchybar
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+export CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+source "$CONFIG_DIR/colors.sh"
+export PLUGIN_DIR="$CONFIG_DIR/plugins"
+export NOW_PLAYING_BIN="$CONFIG_DIR/helpers/sketchybar-now-playing"
+export NOW_PLAYING_CONFIG="$CONFIG_DIR/now-playing.toml"
+FONT="Hack Nerd Font Mono"
 
-source "$CONFIG_DIR/colors.sh" # Loads all defined colors
-# source "$CONFIG_DIR/icons.sh"  # Loads all defined icons
+# 30 px pills within the existing 38 px window gap: 4 px above and below.
+sketchybar --bar height=30 margin=0 y_offset=4 position=top \
+  corner_radius=0 border_width=0 color="$TRANSPARENT" blur_radius=0 \
+  shadow=off sticky=on topmost=window font_smoothing=on \
+  padding_left=4 padding_right=12 drawing=on hidden=off
 
-ITEM_DIR="$CONFIG_DIR/items"     # Directory where the items are configured
-PLUGIN_DIR="$CONFIG_DIR/plugins" # Directory where all the plugin scripts are stored
+sketchybar --default updates=when_shown \
+  icon.font="$FONT:Regular:16.0" icon.color="$SUBTEXT" \
+  icon.padding_left=0 icon.padding_right=0 \
+  label.font="$FONT:Regular:13.0" label.color="$TEXT" \
+  label.padding_left=0 label.padding_right=0 \
+  padding_left=0 padding_right=0 y_offset=0 \
+  background.drawing=off background.color="$TRANSPARENT" \
+  background.border_width=0 scroll_texts=off
 
-FONT="Maple Mono" # Needs to have Regular, Bold, Semibold, Heavy and Black variants
-PADDINGS=3        # All paddings use this value (icon, label, background)
+# One translucent background around each group, with room between pills.
+pill() {
+  sketchybar --set "$1" background.drawing=on \
+    background.color="$PILL_BG" background.corner_radius=12 \
+    background.height=30 background.border_width=1 \
+    background.border_color="$PILL_BORDER" blur_radius=30
+}
+gap() {
+  local width=8
+  sketchybar --add item "$1" "$2" --set "$1" width="$width" \
+    icon.drawing=off label.drawing=off background.drawing=off
+}
 
-# aerospace setting
-AEROSPACE_FOCUSED_MONITOR_NO=$(aerospace list-workspaces --focused)
-AEROSPACE_LIST_OF_WINDOWS_IN_FOCUSED_MONITOR=$(aerospace list-windows --workspace $AEROSPACE_FOCUSED_MONITOR_NO | awk -F'|' '{gsub(/^ *| *$/, "", $2); print $2}')
+source "$CONFIG_DIR/items/spaces.sh"
+gap gap_workspaces_music left
+source "$CONFIG_DIR/items/now_playing.sh"
 
-# Setting up the general bar appearance of the bar
-bar=(
-  height=34
-  notch_offset=0
-  color=$BAR_COLOR
-  shadow=off
-  position=top
-  sticky=on
-  padding_right=8
-  padding_left=8
-  margin=0
-  corner_radius=0
-  topmost=window
-  blur_radius=0
-  y_offset=0
-)
+# Right-side items are added from the outer edge inwards.
+sketchybar --default background.drawing=on background.color="$PILL_BG" \
+  background.corner_radius=12 background.height=30 \
+  background.border_width=1 background.border_color="$PILL_BORDER" \
+  blur_radius=30 icon.color="$SKY" icon.padding_left=12 \
+  icon.padding_right=5 label.padding_left=5 label.padding_right=12
 
-sketchybar --bar "${bar[@]}"
+status() {
+  sketchybar --add item "$1" right --set "$1" icon="$2" label="$3" \
+    script="$PLUGIN_DIR/status.sh" update_freq="$4"
+}
+status time '' "$(date '+%I:%M %p')" 30
+sketchybar --subscribe time system_woke
+gap gap_battery_time right
+status battery '' '--%' 60
+sketchybar --subscribe battery power_source_change system_woke
+gap gap_battery_date right
+status date '' "$(date '+%d %b %a')" 60
+sketchybar --subscribe date system_woke
+gap gap_date_cpu right
+status cpu '' '--%' 10
+gap gap_cpu_memory right
+status memory '' '--% | --G' 10
+gap gap_memory_temp right
+status temp '' '--°C' 15
+sketchybar --subscribe temp system_woke
 
-# Setting up default item properties
-defaults=(
-  updates=when_shown
+# The media helper belongs to this bar; no launch agent or system install.
+# Its own lock also prevents duplicate daemons during concurrent reloads.
+if [ -x "$NOW_PLAYING_BIN" ] && ! pgrep -f '[s]ketchybar-now-playing daemon' >/dev/null 2>&1; then
+  "$NOW_PLAYING_BIN" daemon --config "$NOW_PLAYING_CONFIG" \
+    --event now_playing_change >/tmp/sketchybar-glass-media.log 2>&1 &
+fi
 
-  # icon
-  icon.drawing=off
-  icon.padding_left=0
-  icon.padding_right=0
-  icon.font="$FONT:Regular:14.0"
-
-  # label/text
-  label.font="$FONT:Regular:14.0"
-  label.color=$LABEL_COLOR
-
-  # padding
-  label.padding_left=8
-  label.padding_right=8
-  padding_right=2
-  padding_left=2
-
-  # background
-  background.height=24
-  background.corner_radius=5
-  background.border_width=2
-
-  # popup
-  popup.background.border_width=2
-  popup.background.corner_radius=9
-  popup.background.color=$POPUP_BACKGROUND_COLOR
-  popup.blur_radius=20
-  popup.background.shadow.drawing=on
-
-  scroll_texts=on
-)
-
-sketchybar --default "${defaults[@]}"
-
-# Left
-source "$ITEM_DIR/spaces.sh"
-source "$ITEM_DIR/front_app.sh"
-
-# Right
-source "$ITEM_DIR/calendar.sh"
-source "$ITEM_DIR/battery.sh"
-source "$ITEM_DIR/volume.sh"
-
-# sketchybar --hotload on
-
-# Forcing all item scripts to run (never do this outside of sketchybarrc)
 sketchybar --update
-
-echo "sketchybar configuation loaded.."
