@@ -1,4 +1,7 @@
-typeset -U path PATH
+# Interactive setup only; environment (PATH, EDITOR, ...) lives in .zshenv.
+# Claude Code sources this file from a non-interactive shell to snapshot
+# aliases and functions for its tool shells; give it nothing.
+[[ -o interactive ]] || return
 
 # Emacs bindings
 bindkey -e
@@ -52,8 +55,6 @@ fi
 
 if command -v nvim >/dev/null 2>&1; then
   alias vim='nvim'
-  export EDITOR='nvim'
-  export VISUAL='nvim'
 fi
 
 copydeep() {
@@ -115,22 +116,10 @@ bindkey -e '^[[3~' delete-char
 
 # Optional user tools
 [[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
-[[ -d "$HOME/.bun/bin" ]] && path=("$HOME/.bun/bin" $path)
-[[ -d "$HOME/.opencode/bin" ]] && path=("$HOME/.opencode/bin" $path)
 
 if command -v wt >/dev/null 2>&1; then
   eval "$(command wt config shell init zsh)"
 fi
-
-# Load small OS-specific additions without making the shared config platform-specific.
-case $OSTYPE in
-  darwin*)
-    [[ -r "$HOME/.config/zsh/macos.zsh" ]] && source "$HOME/.config/zsh/macos.zsh"
-    ;;
-  linux*)
-    [[ -r "$HOME/.config/zsh/linux.zsh" ]] && source "$HOME/.config/zsh/linux.zsh"
-    ;;
-esac
 
 # dcg: warn if its Claude Code hook has been removed.
 if command -v dcg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
@@ -241,9 +230,3 @@ sync-skills-k12() {
 
   sync-plugins-k12 "${1:-}"
 }
-
-# strix
-export PATH=/Users/rgomes/.strix/bin:$PATH
-
-# Added by cua-driver-rs installer — see https://github.com/trycua/cua
-export PATH="/Users/rgomes/.local/bin:$PATH"
