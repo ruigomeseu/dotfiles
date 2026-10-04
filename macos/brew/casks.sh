@@ -2,6 +2,7 @@ install_macos_apps() {
   local apps=(
     nikitabobko/tap/aerospace
     arq
+    camguillory/tap/audio-priority-bar
     aws-vault
     bartender
     bambu-studio
