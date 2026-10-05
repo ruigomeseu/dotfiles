@@ -26,6 +26,11 @@ cd macos
 - Tmux Plugin Manager
   - https://github.com/tmux-plugins/tpm
 
+## Linux
+
+Only the shell and agent config is used on Linux. See
+[docs/k12.md](docs/k12.md) for how the k12 dev box is set up.
+
 ## Linking dotfiles
 
 `scripts/link` links the dotfiles into `$HOME` with GNU Stow (needs `stow` and
