@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+# Link dotfiles into $HOME with GNU Stow, then apply settings that can't be
+# stowed. Safe to rerun. Regular files that would block a link are moved to
+# ~/.dotfiles-backup/<timestamp>/ first, so nothing is overwritten.
+#
+# Usage: scripts/link [package...]   (default: this OS's package list)
+# Runs on macOS's bash 3.2: no mapfile, no associative arrays.
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+repo=$(cd "$(dirname "$0")/.." && pwd)
+stow_dir="$repo/stow"
+backup_dir="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+
+default_packages() {
+  case $(uname -s) in
+    Darwin)
+      local dir
+      for dir in "$stow_dir"/*/; do
+        basename "$dir"
+      done
+      ;;
+    # Linux boxes only take the shell and agent config; the rest is desktop
+    # config for the Mac or would replace machine-specific files (~/.gitconfig).
+    *) printf '%s\n' zsh claude codex ;;
+  esac
+}
+
+# Move every regular file or foreign symlink that would block stowing $1.
+move_conflicts() {
+  local package=$1 target dry_run
+  # The dry run exits non-zero when it finds conflicts; those are what we want.
+  dry_run=$(stow -n -v -d "$stow_dir" -t "$HOME" "$package" 2>&1) || true
+  printf '%s\n' "$dry_run" |
+    sed -n -e 's/.* over existing target \(.*\) since .*/\1/p' \
+      -e 's/.*existing target is not owned by stow: \(.*\)$/\1/p' |
+    while IFS= read -r target; do
+      mkdir -p "$backup_dir/$(dirname "$target")"
+      mv "$HOME/$target" "$backup_dir/$target"
+      echo "backed up ~/$target"
+    done
+}
+
+# ~/.claude/settings.json holds machine-specific paths and is edited by Claude
+# Code and hook installers, so merge one key into it instead of stowing it.
+# Agents get bash rather than the interactive zsh setup.
+claude_settings() {
+  local file="$HOME/.claude/settings.json" tmp
+
+  if ! command -v jq >/dev/null 2>&1; then
+    echo "jq not found; skipping $file" >&2
+    return
+  fi
+
+  mkdir -p "$(dirname "$file")"
+  [[ -f $file ]] || echo '{}' >"$file"
+  jq -e '.env.CLAUDE_CODE_SHELL == "/bin/bash"' "$file" >/dev/null && return
+
+  mkdir -p "$backup_dir"
+  cp -p "$file" "$backup_dir/claude-settings.json"
+  tmp=$(mktemp)
+  jq '.env.CLAUDE_CODE_SHELL = "/bin/bash"' "$file" >"$tmp"
+  # Write in place to keep the file's permissions.
+  cat "$tmp" >"$file"
+  rm "$tmp"
+  echo "set CLAUDE_CODE_SHELL=/bin/bash in $file"
+}
+
+main() {
+  local package
+
+  if [[ $# -eq 0 ]]; then
+    set -- $(default_packages)
+  fi
+
+  for package in "$@"; do
+    move_conflicts "$package"
+    stow -v -d "$stow_dir" -t "$HOME" "$package"
+  done
+
+  claude_settings
+
+  if [[ -d $backup_dir ]]; then
+    echo "Backups: $backup_dir"
+  fi
+}
+
+main "$@"

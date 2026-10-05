@@ -9,7 +9,6 @@ set -o pipefail
 . ./brew/packages.sh
 . ./brew/casks.sh
 . ./osx-defaults.sh
-. ./stow.sh
 
 cleanup() {
   info "Finishing..."
@@ -54,8 +53,8 @@ main() {
   setup_osx
   success "Finished configuring MacOS defaults. NOTE: A restart is needed"
 
-  stow_dotfiles
-  success "Finished stowing dotfiles"
+  ../scripts/link
+  success "Finished linking dotfiles"
 
   success "Done - restart your system to complete the setup"
 }

@@ -29,12 +29,10 @@ case $OSTYPE in
   linux*) [[ -r "$HOME/.config/zsh/linux.zsh" ]] && source "$HOME/.config/zsh/linux.zsh" ;;
 esac
 
-# Fallback for coding agents still running commands in zsh (Claude Code sets
-# CLAUDECODE, Codex sets CODEX_THREAD_ID). Claude Code is set to bash and Codex
-# is asked to use it; if one doesn't, make zsh behave like bash where agents
-# trip most: let unmatched globs pass through (grep --include=*.ts), split
-# unquoted $VARs, and never page.
-if [[ -n $CLAUDECODE || -n $CODEX_THREAD_ID ]] && [[ ! -o interactive ]]; then
+# Codex runs commands in the login shell and has no setting to change it;
+# ~/.codex/AGENTS.md asks it for bash. When it uses zsh anyway, behave like
+# bash where agents trip most: let unmatched globs pass through
+# (grep --include=*.ts) and split unquoted $VARs.
+if [[ -n $CODEX_THREAD_ID ]] && [[ ! -o interactive ]]; then
   setopt NO_NOMATCH SH_WORD_SPLIT
-  export PAGER=cat GIT_PAGER=cat
 fi
