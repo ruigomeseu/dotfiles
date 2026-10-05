@@ -19,9 +19,9 @@ for _dir in \
 done
 unset _dir
 
-if (( $+commands[nvim] )); then
-  export EDITOR=nvim VISUAL=nvim
-fi
+# Not guarded on nvim being on PATH: on macOS, Homebrew joins PATH later, in
+# .zprofile. Both machines have nvim.
+export EDITOR=nvim VISUAL=nvim
 
 # OS-specific environment.
 case $OSTYPE in
